@@ -1,0 +1,122 @@
+/* Kawaii UI Styles */
+
+.kawaii-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 210, 220, 0.5);
+  box-shadow: 0 8px 32px rgba(255, 209, 220, 0.2);
+  padding: 1.5rem;
+}
+
+.kawaii-button {
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  outline: none;
+}
+
+.kawaii-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+  transform: translate(0, -75%);
+  transition: transform 0.3s ease;
+}
+
+.kawaii-button:hover::after {
+  transform: translate(0, 0);
+}
+
+.kawaii-input {
+  border-radius: 20px;
+  border: 2px solid #ffd1dc;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.kawaii-input:focus {
+  outline: none;
+  border-color: #ff69b4;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
+}
+
+.kawaii-chat-bubble {
+  border-radius: 24px;
+  padding: 1rem 1.25rem;
+  max-width: 80%;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.kawaii-chat-bubble-user {
+  background: linear-gradient(135deg, #ff69b4, #da70d6);
+  color: white;
+  border-bottom-right-radius: 8px;
+  align-self: flex-end;
+}
+
+.kawaii-chat-bubble-assistant {
+  background: white;
+  border: 1px solid #ffd1dc;
+  border-bottom-left-radius: 8px;
+  align-self: flex-start;
+}
+
+.kawaii-badge {
+  border-radius: 50px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Soft pastel color classes */
+.bg-pink-soft { background-color: #ffd1dc; }
+.bg-purple-soft { background-color: #e6e6fa; }
+.bg-mint-soft { background-color: #98ff98; }
+.bg-peach-soft { background-color: #ffe5b4; }
+.bg-lavender-soft { background-color: #e6e6fa; }
+
+.text-pink-soft { color: #ff69b4; }
+.text-purple-soft { color: #9370db; }
+.text-mint-soft { color: #40e0d0; }
+.text-peach-soft { color: #ffccaa; }
+
+/* Gradient classes */
+.bg-gradient-pink-purple {
+  background: linear-gradient(135deg, #ff69b4, #9370db);
+}
+
+.bg-gradient-mint-peach {
+  background: linear-gradient(135deg, #98ff98, #ffe5b4);
+}
+
+/* Animation classes */
+.animate-bounce-slow {
+  animation: bounce-slow 2s infinite;
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .kawaii-card {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .kawaii-chat-bubble {
+    max-width: 90%;
+    padding: 0.75rem 1rem;
+  }
+}

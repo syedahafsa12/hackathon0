@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(speckit.constitution)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx tsc:*)",
+      "Bash(tree:*)",
+      "Bash(timeout 10 npm run dev:*)",
+      "Bash(ls:*)",
+      "Bash(pkill:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 20 bash:*)",
+      "Bash(timeout 15 bash:*)",
+      "Bash(taskkill //F //PID 27308)",
+      "Bash(timeout 30 bash:*)",
+      "Bash(npm run build:*)",
+      "Bash(timeout 45 bash:*)",
+      "Bash(timeout 25 bash:*)",
+      "Bash(timeout 35 bash:*)",
+      "Bash(timeout 40 bash:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}

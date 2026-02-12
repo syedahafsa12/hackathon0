@@ -1,0 +1,12 @@
+{
+  "name": "mini-hafsa-shared",
+  "version": "1.0.0",
+  "description": "Shared types and utilities for Mini Hafsa AI Employee",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0"
+  }
+}

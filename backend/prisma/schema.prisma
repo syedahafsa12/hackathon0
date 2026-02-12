@@ -1,0 +1,224 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  content   String
+  role      String   // 'user' or 'assistant'
+  intent    String?
+  metadata  String?  // JSON string
+  status    String?  // 'sent', 'delivered', 'read'
+  timestamp DateTime @default(now())
+  parentId  String?
+  createdAt DateTime @default(now())
+}
+
+model EmailMessage {
+  id          String    @id @default(uuid())
+  userId      String
+  messageId   String?   @unique
+  threadId    String?
+  from        String
+  to          String
+  subject     String
+  body        String
+  isRead      Boolean   @default(false)
+  receivedAt  DateTime
+  createdAt   DateTime  @default(now())
+}
+
+model CalendarEvent {
+  id          String    @id @default(uuid())
+  userId      String
+  eventId     String?   @unique
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  location    String?
+  attendees   String?   // JSON string
+  calendarId  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  status      String    @default("pending") // 'pending', 'in_progress', 'completed'
+  priority    String?   // 'low', 'medium', 'high'
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Approval {
+  id              String    @id @default(uuid())
+  userId          String
+  actionType      String
+  actionData      String    // JSON string
+  status          String    @default("pending") // 'pending', 'approved', 'rejected'
+  requestedAt     DateTime  @default(now())
+  respondedAt     DateTime?
+  requesterId     String?
+  responderId     String?
+  rejectionReason String?
+
+  // Execution tracking fields
+  executedAt       DateTime?
+  executionStatus  String?   // 'executing' | 'success' | 'failed'
+  executionError   String?
+  executionData    String?   // JSON string of execution result
+
+  // Obsidian vault integration fields
+  obsidianPath    String?   // Path to .md file in vault
+  obsidianSynced  Boolean   @default(false)  // Whether vault file exists
+  expiresAt       DateTime? // Approval expiration time
+
+  @@index([obsidianPath])
+}
+
+
+model KnowledgeEntry {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  content     String
+  category    String?
+  tags        String?  // JSON string
+  source      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  accessCount Int      @default(0)
+  filePath    String?  // Path to .md file in vault
+
+  @@index([filePath])
+}
+
+model LinkedInOutbox {
+  id          String    @id @default(uuid())
+  userId      String
+  content     String
+  hashtags    String?   // JSON string
+  imageUrl    String?
+  status      String    @default("ready_to_publish") // 'ready_to_publish' | 'published' | 'failed'
+  createdAt   DateTime  @default(now())
+  publishedAt DateTime?
+  error       String?
+}
+
+model Reminder {
+  id          String    @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  remindAt    DateTime
+  status      String    @default("pending") // 'pending', 'fired', 'cancelled'
+  firedAt     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// News Cache for storing fetched news with 24-hour TTL
+model NewsCache {
+  id          String    @id @default(uuid())
+  userId      String
+  date        DateTime  // Date only, no time component
+  category    String    // 'tech' | 'ai' | 'world'
+  items       String    // JSON string of news items
+  fetchedAt   DateTime  @default(now())
+  expiresAt   DateTime
+
+  @@unique([userId, date, category])
+  @@index([userId, expiresAt])
+}
+
+// CEO Weekly Briefing storage
+model CEOBriefing {
+  id              String    @id @default(uuid())
+  userId          String
+  weekStartDate   DateTime  // Start of the week
+  weekEndDate     DateTime  // End of the week
+  metrics         String    // JSON string of metrics
+  bottlenecks     String    // JSON string of bottlenecks
+  suggestions     String    // JSON string of suggestions
+  filePath        String
+  createdAt       DateTime  @default(now())
+
+  @@unique([userId, weekStartDate])
+}
+
+// Ralph Loop State for autonomous task execution
+model RalphState {
+  id                  String    @id @default(uuid())
+  taskId              String    @unique
+  userId              String
+  prompt              String
+  currentIteration    Int       @default(0)
+  maxIterations       Int       @default(10)
+  startedAt           DateTime  @default(now())
+  lastIterationAt     DateTime  @default(now())
+  status              String    @default("running") // 'running' | 'completed' | 'failed' | 'stopped'
+  completionPromise   String    @default("TASK_COMPLETE")
+  iterations          String    // JSON string of iteration history
+  obsidianStatePath   String?   // Path to state file in vault
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([userId, status])
+}
+
+// Daily Priority Plans
+model PriorityPlan {
+  id              String    @id @default(uuid())
+  userId          String
+  date            DateTime  // Date for this priority plan
+  doNow           String    // JSON string of urgent tasks
+  doNext          String    // JSON string of important tasks
+  canWait         String    // JSON string of deferrable tasks
+  calendarEvents  String    // JSON string of today's events
+  estimatedHours  Float?
+  filePath        String?
+  generatedAt     DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, date])
+}
+
+model UserOAuthToken {
+  id           String   @id @default(uuid())
+  userId       String
+  provider     String   // 'google', etc.
+  accessToken  String
+  refreshToken String?
+  expiryDate   BigInt?
+  idToken      String?
+  tokenType    String?
+  scope        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, provider])
+}
